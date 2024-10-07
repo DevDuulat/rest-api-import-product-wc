@@ -40,9 +40,9 @@ class ImportProductJob implements ShouldQueue
 
         try {
             $existingProducts = $woocommerce->get('products', ['sku' => $this->productData['sku']]);
+
             if (!empty($existingProducts)) {
-                Log::info('Product with SKU ' . $this->productData['sku'] . ' already exists. Skipping import.');
-                return;
+                throw new \Exception('Неверный или дублированный артикул. [product_invalid_sku]');
             }
 
             $product = $woocommerce->post('products', $this->productData);
